@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Online Snellen Eye Chart with Screen Calibration</title>
+    <meta name="description" content="Test your visual acuity at home with this calibrated online Snellen chart. Adjust for your screen size, pick a viewing distance, and read from the largest letters down to the smallest.">
+    <link rel="canonical" href="https://neovistainc.com/tools/snellen-chart/">
+    <link rel="stylesheet" href="/style.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Online Snellen Eye Chart with Screen Calibration">
+    <meta property="og:description" content="Test your visual acuity at home with this calibrated online Snellen chart. Adjust for your screen size, pick a viewing distance, and read from the largest letters down to the smallest.">
+    <meta property="og:url" content="https://neovistainc.com/tools/snellen-chart/">
+    <meta property="og:site_name" content="NeoVista Inc">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Online Snellen Eye Chart",
+        "url": "https://neovistainc.com/tools/snellen-chart/",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Any",
+        "description": "A screen-calibrated Snellen eye chart for testing visual acuity at home. Supports 10-foot and 20-foot viewing distances.",
+        "publisher": {
+            "@type": "Organization",
+            "name": "NeoVista Inc",
+            "url": "https://neovistainc.com/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://neovistainc.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://neovistainc.com/#tools"},
+            {"@type": "ListItem", "position": 3, "name": "Online Snellen Chart", "item": "https://neovistainc.com/tools/snellen-chart/"}
+        ]
+    }
+    </script>
+
+    <style>
+        .calibration-box {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+            text-align: center;
+        }
+        .calibration-box label {
+            display: block;
+            font-size: .95rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        .credit-card-outline {
+            width: 300px;
+            height: 189px;
+            border: 2px dashed var(--teal);
+            border-radius: 10px;
+            margin: 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: .9rem;
+            position: relative;
+            cursor: ew-resize;
+            user-select: none;
+            -webkit-user-select: none;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(26, 138, 158, 0.03) 10px,
+                rgba(26, 138, 158, 0.03) 20px
+            );
+        }
+        .credit-card-outline .resize-handle {
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 40px;
+            background: var(--teal);
+            border-radius: 4px;
+            cursor: ew-resize;
+        }
+        .credit-card-outline .card-label {
+            pointer-events: none;
+        }
+        .calibration-input-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .calibration-input-row input[type="range"] {
+            width: 240px;
+            accent-color: var(--teal);
+        }
+        .calibration-input-row .slider-value {
+            font-size: .9rem;
+            color: var(--text-light);
+            min-width: 60px;
+        }
+        .distance-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .distance-btn {
+            padding: 10px 28px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg);
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--text);
+            transition: all .2s;
+        }
+        .distance-btn:hover {
+            border-color: var(--teal);
+        }
+        .distance-btn.active {
+            border-color: var(--teal);
+            background: var(--teal);
+            color: #fff;
+        }
+        .chart-area {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px 20px;
+            margin: 24px 0;
+            text-align: center;
+            min-height: 400px;
+        }
+        .chart-row {
+            margin: 0 0 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            line-height: 1.2;
+            color: #111;
+        }
+        .chart-row-label {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 400;
+            font-size: 13px;
+            color: var(--text-light);
+            letter-spacing: 0;
+            display: inline-block;
+            min-width: 60px;
+            text-align: right;
+            margin-right: 16px;
+            vertical-align: middle;
+        }
+        .chart-row-letters {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .cover-eye-notice {
+            background: #fef3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 14px 20px;
+            font-size: .95rem;
+            color: #856404;
+            margin: 16px 0;
+            text-align: center;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 24px 0 8px;
+        }
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+        .step-dot.active {
+            background: var(--teal);
+        }
+        .step-label {
+            text-align: center;
+            font-size: .85rem;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+        .btn-primary {
+            background: var(--teal);
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 8px 4px;
+        }
+        .btn-primary:hover {
+            background: var(--blue);
+        }
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 8px 4px;
+        }
+        .btn-secondary:hover {
+            border-color: var(--teal);
+        }
+        .disclaimer {
+            background: var(--bg-alt);
+            border-left: 3px solid var(--teal);
+            padding: 16px 20px;
+            margin: 32px 0;
+            font-size: .9rem;
+            color: var(--text-light);
+        }
+        .hidden {
+            display: none;
+        }
+        .print-btn {
+            margin-top: 16px;
+        }
+
+        @media print {
+            nav, footer, .calibration-box, .distance-selector,
+            .cover-eye-notice, .disclaimer, .breadcrumb, .meta,
+            .step-indicator, .step-label, .btn-primary, .btn-secondary,
+            .print-btn, #step-calibration, #intro-section, .distance-selector-wrap {
+                display: none;
+            }
+            body {
+                background: #fff;
+                color: #000;
+                font-size: 12pt;
+            }
+            .container {
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            .chart-area {
+                border: none;
+                padding: 20px 0;
+                margin: 0;
+                page-break-inside: avoid;
+            }
+            .chart-row {
+                color: #000;
+            }
+            .chart-row-label {
+                color: #444;
+            }
+            h1 {
+                font-size: 16pt;
+                margin-bottom: 8px;
+            }
+            @page {
+                margin: 0.5in;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .credit-card-outline {
+                width: 220px;
+                height: 139px;
+            }
+            .calibration-input-row input[type="range"] {
+                width: 160px;
+            }
+            .chart-row-label {
+                display: block;
+                text-align: center;
+                margin-right: 0;
+                margin-bottom: 2px;
+                min-width: auto;
+            }
+            .chart-area {
+                padding: 24px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/">NeoVista</a>
+    <div class="nav-links">
+        <a href="/#articles">Articles</a>
+        <a href="/#tools">Tools</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / <a href="/#tools">Tools</a> / Online Snellen Chart</div>
+
+    <h1>Online Snellen Eye Chart</h1>
+    <div class="meta">Updated May 2026</div>
+
+    <div id="intro-section">
+        <p>The Snellen chart is the standard tool eye care professionals use to measure visual acuity, which is how clearly you can distinguish letters or shapes at a given distance. I built this online version because I wanted a quick way to check whether my vision had changed between annual appointments. It runs right in your browser and uses your screen to display the familiar rows of letters, starting with a large E at the top and getting progressively smaller toward the bottom.</p>
+
+        <p>To get a meaningful result, you need to stand at the correct distance from your screen and cover one eye at a time. The smallest row you can read accurately corresponds to a Snellen fraction like 20/20 or 20/40. That fraction tells you what you can see at 20 feet compared to someone with standard vision. Before anything else, the tool walks you through a short calibration step so the letter sizes on your specific monitor are physically accurate. Without that calibration, screen pixel density varies too much between devices for the sizes to mean anything.</p>
+
+        <p>Keep in mind that this is a rough screening, not a medical exam. Factors like screen glare, room lighting, and the font rendering on your device all affect accuracy. It cannot detect astigmatism, peripheral vision problems, or eye diseases. If you notice a change in your results or if reading the smaller lines is harder than it used to be, schedule a visit with an optometrist for proper testing with controlled equipment.</p>
+    </div>
+
+    <!-- Step indicators -->
+    <div class="step-indicator">
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+    </div>
+    <div class="step-label" id="step-label-text">Step 1 of 2 -- Calibrate your screen</div>
+
+    <!-- STEP 1: Calibration -->
+    <div id="step-calibration">
+        <div class="calibration-box">
+            <h2 style="margin-top:0">Screen Calibration</h2>
+            <p>Place a standard credit card (or any card that is 3.375 inches wide) flat against your screen. Drag the slider or the handle until the dashed rectangle matches the card's width exactly.</p>
+
+            <div class="credit-card-outline" id="credit-card">
+                <div class="card-label">Adjust to match your card width</div>
+                <div class="resize-handle" id="resize-handle"></div>
+            </div>
+
+            <div class="calibration-input-row">
+                <label for="calibration-slider" style="margin:0">Width:</label>
+                <input type="range" id="calibration-slider" min="150" max="500" value="300" step="1">
+                <span class="slider-value" id="slider-value">300 px</span>
+            </div>
+
+            <p style="font-size:.85rem;color:var(--text-light);margin-top:8px">A standard credit card is 3.375 inches (85.6 mm) wide.</p>
+
+            <button class="btn-primary" id="btn-calibrate" type="button">Confirm Calibration</button>
+        </div>
+    </div>
+
+    <!-- STEP 2: Chart -->
+    <div id="step-chart" class="hidden">
+        <div class="cover-eye-notice">
+            Cover one eye with your hand (do not press on the eyelid). Read the smallest line you can. Then switch eyes and repeat.
+        </div>
+
+        <div class="distance-selector-wrap">
+            <p style="text-align:center;margin-bottom:4px;font-size:.95rem;color:var(--text-light);">Select your viewing distance</p>
+            <div class="distance-selector">
+                <button class="distance-btn active" id="btn-10ft" type="button">10 feet (3 m)</button>
+                <button class="distance-btn" id="btn-20ft" type="button">20 feet (6 m)</button>
+            </div>
+        </div>
+
+        <div class="chart-area" id="chart-area">
+            <!-- Chart rows rendered by JS -->
+        </div>
+
+        <div style="text-align:center">
+            <button class="btn-secondary" id="btn-recalibrate" type="button">Re-calibrate</button>
+            <button class="btn-secondary print-btn" id="btn-print" type="button">Print Chart</button>
+        </div>
+    </div>
+
+    <div class="disclaimer">
+        <strong>Medical disclaimer</strong> -- This is not a medical eye exam. Online charts cannot replace professional testing with calibrated equipment in a controlled environment. See a licensed optometrist or ophthalmologist for accurate vision testing and any concerns about your eye health.
+    </div>
+</div>
+
+<footer>
+    <p>2026 NeoVista Inc.</p>
+</footer>
+
+<script>
+(function () {
+    "use strict";
+
+    /* ---- Constants ---- */
+    var CREDIT_CARD_WIDTH_INCHES = 3.375;
+    var SNELLEN_ROWS = [
+        { label: "20/200", letters: "E",                  optotypeInches: 3.490 },
+        { label: "20/100", letters: "F P",                optotypeInches: 1.745 },
+        { label: "20/70",  letters: "T O Z",              optotypeInches: 1.222 },
+        { label: "20/50",  letters: "L P E D",            optotypeInches: 0.873 },
+        { label: "20/40",  letters: "P E C F D",          optotypeInches: 0.698 },
+        { label: "20/30",  letters: "E D F C Z P",        optotypeInches: 0.523 },
+        { label: "20/25",  letters: "F E L O P Z D",      optotypeInches: 0.436 },
+        { label: "20/20",  letters: "D E F P O T E C",    optotypeInches: 0.349 },
+        { label: "20/15",  letters: "F D P L T C E O",    optotypeInches: 0.262 },
+        { label: "20/10",  letters: "P E Z O L C F T D",  optotypeInches: 0.175 }
+    ];
+
+    /* ---- State ---- */
+    var pixelsPerInch = 0;
+    var viewingDistanceFt = 10;
+
+    /* ---- DOM refs ---- */
+    var creditCard = document.getElementById("credit-card");
+    var slider = document.getElementById("calibration-slider");
+    var sliderValue = document.getElementById("slider-value");
+    var btnCalibrate = document.getElementById("btn-calibrate");
+    var stepCalibration = document.getElementById("step-calibration");
+    var stepChart = document.getElementById("step-chart");
+    var chartArea = document.getElementById("chart-area");
+    var btn10ft = document.getElementById("btn-10ft");
+    var btn20ft = document.getElementById("btn-20ft");
+    var btnRecalibrate = document.getElementById("btn-recalibrate");
+    var btnPrint = document.getElementById("btn-print");
+    var dot1 = document.getElementById("dot-1");
+    var dot2 = document.getElementById("dot-2");
+    var stepLabelText = document.getElementById("step-label-text");
+    var resizeHandle = document.getElementById("resize-handle");
+
+    if (!creditCard || !slider || !btnCalibrate || !chartArea) {
+        return;
+    }
+
+    /* ---- Calibration slider ---- */
+    function updateCardWidth(px) {
+        var clamped = Math.max(150, Math.min(500, px));
+        creditCard.style.width = clamped + "px";
+        creditCard.style.height = Math.round(clamped * 0.63) + "px";
+        slider.value = clamped;
+        sliderValue.textContent = clamped + " px";
+    }
+
+    slider.addEventListener("input", function () {
+        updateCardWidth(parseInt(slider.value, 10));
+    });
+
+    /* ---- Drag-to-resize handle ---- */
+    var isDragging = false;
+    var dragStartX = 0;
+    var dragStartWidth = 0;
+
+    function onDragStart(e) {
+        isDragging = true;
+        dragStartX = e.touches ? e.touches[0].clientX : e.clientX;
+        dragStartWidth = parseInt(slider.value, 10);
+        e.preventDefault();
+    }
+
+    function onDragMove(e) {
+        if (!isDragging) { return; }
+        var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        var delta = clientX - dragStartX;
+        updateCardWidth(dragStartWidth + delta);
+    }
+
+    function onDragEnd() {
+        isDragging = false;
+    }
+
+    resizeHandle.addEventListener("mousedown", onDragStart);
+    resizeHandle.addEventListener("touchstart", onDragStart, { passive: false });
+    document.addEventListener("mousemove", onDragMove);
+    document.addEventListener("touchmove", onDragMove, { passive: false });
+    document.addEventListener("mouseup", onDragEnd);
+    document.addEventListener("touchend", onDragEnd);
+
+    /* ---- Calibration confirm ---- */
+    btnCalibrate.addEventListener("click", function () {
+        var cardWidthPx = parseInt(slider.value, 10);
+        pixelsPerInch = cardWidthPx / CREDIT_CARD_WIDTH_INCHES;
+
+        stepCalibration.classList.add("hidden");
+        stepChart.classList.remove("hidden");
+        dot1.classList.remove("active");
+        dot2.classList.add("active");
+        stepLabelText.textContent = "Step 2 of 2 -- Read the chart";
+
+        renderChart();
+    });
+
+    /* ---- Distance toggle helper ---- */
+    function setDistance(ft) {
+        viewingDistanceFt = ft;
+        btn10ft.classList.toggle("active", ft === 10);
+        btn20ft.classList.toggle("active", ft === 20);
+        renderChart();
+    }
+
+    btn10ft.addEventListener("click", function () { setDistance(10); });
+    btn20ft.addEventListener("click", function () { setDistance(20); });
+
+    /* ---- Re-calibrate ---- */
+    btnRecalibrate.addEventListener("click", function () {
+        stepChart.classList.add("hidden");
+        stepCalibration.classList.remove("hidden");
+        dot2.classList.remove("active");
+        dot1.classList.add("active");
+        stepLabelText.textContent = "Step 1 of 2 -- Calibrate your screen";
+    });
+
+    /* ---- Print ---- */
+    btnPrint.addEventListener("click", function () {
+        window.print();
+    });
+
+    /* ---- Render chart ---- */
+    function renderChart() {
+        if (pixelsPerInch <= 0) { return; }
+
+        /*
+         * Snellen optotype sizes are defined for a 20-foot testing distance.
+         * At 20 ft, a 20/20 letter subtends 5 arcminutes and is 0.349 inches tall.
+         * At 10 ft (half the distance), the letter needs to be half the physical
+         * size to subtend the same angle. Scale by (distance / 20).
+         */
+        var distanceScale = viewingDistanceFt / 20;
+        var html = "";
+        var rowCount = SNELLEN_ROWS.length;
+
+        for (var i = 0; i < rowCount; i++) {
+            var row = SNELLEN_ROWS[i];
+            var letterHeightInches = row.optotypeInches * distanceScale;
+            var letterHeightPx = Math.round(letterHeightInches * pixelsPerInch);
+
+            /* Skip rows smaller than 6px -- they would be unreadable */
+            if (letterHeightPx < 6) { continue; }
+
+            /* Adjust label for non-20ft distances */
+            var displayLabel = row.label;
+            if (viewingDistanceFt !== 20) {
+                var numerator = viewingDistanceFt;
+                var denom = parseInt(row.label.split("/")[1], 10);
+                var scaledDenom = Math.round(denom * (viewingDistanceFt / 20));
+                displayLabel = numerator + "/" + scaledDenom;
+            }
+
+            html += '<div class="chart-row" style="font-size:' + letterHeightPx + 'px">';
+            html += '<span class="chart-row-label">' + displayLabel + '</span>';
+            html += '<span class="chart-row-letters">' + row.letters + '</span>';
+            html += '</div>';
+        }
+
+        chartArea.innerHTML = html;
+    }
+
+})();
+</script>
+
+</body>
+</html>
