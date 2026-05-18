@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Screen Time Calculator and Eye Strain Risk Assessment</title>
+    <meta name="description" content="Calculate your total daily screen time across all devices and get a personalized digital eye strain risk assessment with practical recommendations.">
+    <link rel="canonical" href="https://neovistainc.com/tools/screen-time-calculator/">
+    <link rel="stylesheet" href="/style.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Screen Time Calculator and Eye Strain Risk Assessment">
+    <meta property="og:description" content="Calculate your total daily screen time across all devices and get a personalized digital eye strain risk assessment with practical recommendations.">
+    <meta property="og:url" content="https://neovistainc.com/tools/screen-time-calculator/">
+    <meta property="og:site_name" content="NeoVista Inc">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Screen Time Calculator and Eye Strain Risk Assessment">
+    <meta name="twitter:description" content="Calculate your total daily screen time across all devices and get a personalized digital eye strain risk assessment with practical recommendations.">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Screen Time Calculator",
+        "url": "https://neovistainc.com/tools/screen-time-calculator/",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Any",
+        "description": "Calculate your total daily screen time across all devices and get a personalized digital eye strain risk assessment with practical recommendations.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+
+    <style>
+        .slider-group { margin-bottom: 20px; }
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: .95rem;
+            color: var(--text);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .slider-group .slider-val {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--teal);
+            min-width: 60px;
+            text-align: right;
+        }
+        .slider-group input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--border);
+            outline: none;
+            margin-bottom: 0;
+            border: none;
+            padding: 0;
+        }
+        .slider-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--teal);
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,.2);
+        }
+        .slider-group input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--teal);
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,.2);
+        }
+        .radio-group { margin-bottom: 20px; }
+        .radio-group p {
+            font-size: .95rem;
+            color: var(--text);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .radio-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .radio-options label {
+            display: inline-block;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: .9rem;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+            color: var(--text);
+            margin-bottom: 0;
+        }
+        .radio-options input[type="radio"] {
+            display: none;
+        }
+        .radio-options input[type="radio"]:checked + span {
+            color: var(--teal);
+            font-weight: 600;
+        }
+        .radio-options label:has(input:checked) {
+            background: var(--blue-light);
+            border-color: var(--teal);
+        }
+        .results-panel {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px;
+            margin-top: 28px;
+        }
+        .results-panel h2 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: .95rem;
+        }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { color: var(--text-light); }
+        .stat-value { font-weight: 600; color: var(--text); }
+        .risk-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: .9rem;
+        }
+        .risk-low { background: #e6f4ea; color: #1e7e34; }
+        .risk-moderate { background: #fff8e1; color: #b8860b; }
+        .risk-high { background: #fde8e8; color: #c0392b; }
+        .risk-very-high { background: #f5c6cb; color: #8b0000; }
+        .rec-list {
+            margin: 16px 0 0 0;
+            padding: 0;
+            list-style: none;
+        }
+        .rec-list li {
+            padding: 10px 0 10px 28px;
+            position: relative;
+            font-size: .9rem;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+        .rec-list li:last-child { border-bottom: none; }
+        .rec-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 14px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--teal);
+        }
+        .comparison-bar-container {
+            margin-top: 16px;
+        }
+        .comparison-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: .85rem;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+        .comparison-bar-track {
+            background: var(--border);
+            height: 14px;
+            border-radius: 7px;
+            position: relative;
+            overflow: hidden;
+        }
+        .comparison-bar-fill {
+            height: 100%;
+            border-radius: 7px;
+            transition: width .4s ease;
+        }
+        .comparison-bar-avg {
+            position: absolute;
+            top: -2px;
+            width: 3px;
+            height: 18px;
+            background: var(--text);
+            border-radius: 2px;
+            z-index: 2;
+        }
+        .comparison-note {
+            font-size: .82rem;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 24px 0;
+        }
+        @media(max-width:600px) {
+            .radio-options { gap: 6px; }
+            .radio-options label { padding: 6px 12px; font-size: .85rem; }
+            .results-panel { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/">NeoVista</a>
+    <div class="nav-links">
+        <a href="/#articles">Articles</a>
+        <a href="/#tools">Tools</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Tools / Screen time calculator</div>
+
+    <h1>Screen Time Calculator</h1>
+    <div class="meta">Updated May 2026</div>
+
+    <p>I started tracking my screen time after a particularly rough week where I had headaches every single afternoon. When I actually added up the hours across all my devices, the total was higher than I expected. Fourteen hours. On a Tuesday. That number forced me to pay attention to something I had been ignoring for years.</p>
+
+    <p>Most of us know we spend too long on screens, but there is a gap between vague awareness and seeing the real numbers in front of you. When you see the weekly total, the yearly total, and where that puts you relative to the average American, the picture gets harder to dismiss. The research on digital eye strain consistently shows that total accumulated screen time is one of the strongest predictors of symptom severity. A 2023 meta-analysis in BMC Ophthalmology found that individuals with more than six hours of daily screen exposure had roughly double the odds of developing digital eye strain symptoms compared to lighter users.</p>
+
+    <p>This calculator adds up your screen time across work computers, phones, tablets, and TV. It then uses those totals along with your break habits, age, and vision correction status to estimate your risk level for digital eye strain. The thresholds are based on published findings, not arbitrary cutoffs. The recommendations at the end are the same ones I follow myself, adjusted for your specific usage pattern. None of it replaces an eye exam, but it gives you a clear starting point for understanding what your daily habits are doing to your eyes over time.</p>
+
+    <div class="tool-container">
+        <h2>Your Screen Usage</h2>
+
+        <div class="slider-group">
+            <label>
+                Work hours on computer
+                <span class="slider-val" id="work-val">4 hrs</span>
+            </label>
+            <input type="range" id="work-hours" min="0" max="12" step="0.5" value="4">
+        </div>
+
+        <div class="slider-group">
+            <label>
+                Phone usage per day
+                <span class="slider-val" id="phone-val">2 hrs</span>
+            </label>
+            <input type="range" id="phone-hours" min="0" max="8" step="0.5" value="2">
+        </div>
+
+        <div class="slider-group">
+            <label>
+                TV and streaming per day
+                <span class="slider-val" id="tv-val">1.5 hrs</span>
+            </label>
+            <input type="range" id="tv-hours" min="0" max="6" step="0.5" value="1.5">
+        </div>
+
+        <div class="slider-group">
+            <label>
+                Tablet usage per day
+                <span class="slider-val" id="tablet-val">0.5 hrs</span>
+            </label>
+            <input type="range" id="tablet-hours" min="0" max="4" step="0.5" value="0.5">
+        </div>
+
+        <div class="radio-group">
+            <p>Breaks taken per hour of screen use</p>
+            <div class="radio-options">
+                <label><input type="radio" name="breaks" value="0"><span>None</span></label>
+                <label><input type="radio" name="breaks" value="1" checked><span>1 break</span></label>
+                <label><input type="radio" name="breaks" value="2"><span>2 breaks</span></label>
+                <label><input type="radio" name="breaks" value="3"><span>3 or more</span></label>
+            </div>
+        </div>
+
+        <div class="radio-group">
+            <p>Do you currently wear glasses or contacts?</p>
+            <div class="radio-options">
+                <label><input type="radio" name="glasses" value="yes"><span>Yes</span></label>
+                <label><input type="radio" name="glasses" value="no" checked><span>No</span></label>
+            </div>
+        </div>
+
+        <div class="radio-group">
+            <p>Your age range</p>
+            <div class="radio-options">
+                <label><input type="radio" name="age" value="under20"><span>Under 20</span></label>
+                <label><input type="radio" name="age" value="20-39" checked><span>20 to 39</span></label>
+                <label><input type="radio" name="age" value="40-59"><span>40 to 59</span></label>
+                <label><input type="radio" name="age" value="60+"><span>60 and over</span></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-panel" id="results">
+        <h2>Your Results</h2>
+
+        <div class="stat-row">
+            <span class="stat-label">Total daily screen time</span>
+            <span class="stat-value" id="r-daily">8.0 hours</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Weekly total</span>
+            <span class="stat-value" id="r-weekly">56.0 hours</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Yearly total</span>
+            <span class="stat-value" id="r-yearly">2,920 hours</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Digital eye strain risk</span>
+            <span class="stat-value" id="r-risk"><span class="risk-badge risk-moderate">Moderate</span></span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Estimated blink deficit</span>
+            <span class="stat-value" id="r-blink">4,320 blinks/day</span>
+        </div>
+
+        <hr class="section-divider">
+
+        <h2>How You Compare</h2>
+        <div class="comparison-bar-container">
+            <div class="comparison-bar-label">
+                <span>0 hrs</span>
+                <span>20 hrs</span>
+            </div>
+            <div class="comparison-bar-track">
+                <div class="comparison-bar-fill" id="bar-fill" style="width:40%;background:var(--teal);"></div>
+                <div class="comparison-bar-avg" id="bar-avg" style="left:36.5%;"></div>
+            </div>
+            <div class="comparison-note" id="comparison-text">
+                The average American spends about 7 hours and 18 minutes on screens per day. You are at 8.0 hours.
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <h2>Personalized Recommendations</h2>
+        <ul class="rec-list" id="r-recs">
+            <li>Follow the 20-20-20 rule during your work sessions.</li>
+        </ul>
+    </div>
+
+    <div style="margin-top:48px">
+        <h2>Understanding Your Results</h2>
+
+        <p>The risk levels in this calculator are based on hours of accumulated screen exposure, adjusted for how often you take breaks and a few individual factors. They are not a diagnosis. Think of them as a rough gauge of how much strain your eyes are absorbing on a typical day.</p>
+
+        <p>Under four hours of total screen time puts most people in the low risk category. At that level, digital eye strain symptoms are uncommon as long as you are not working in terrible lighting or sitting six inches from a monitor.</p>
+
+        <p>Between four and eight hours is where most working adults land. Whether this range is moderate or high depends heavily on breaks. Someone who takes a short visual break every 20 to 30 minutes will experience significantly less strain than someone who powers through three hours without looking up. The 20-20-20 rule, where you look at something 20 feet away for 20 seconds every 20 minutes, has consistent support in the literature as a practical intervention for this group.</p>
+
+        <p>Eight to twelve hours is where problems become common rather than occasional. At this level, even with good break habits, most people will notice some end-of-day symptoms like dryness, heaviness, or mild blurring when shifting focus to distant objects.</p>
+
+        <p>Above twelve hours, which happens more often than people think when you combine work, phone, and evening streaming, the risk is high regardless of other factors. The cumulative exposure simply overwhelms most protective habits. If your total lands here, reducing screen time on at least one device is worth considering alongside the break and ergonomic strategies.</p>
+
+        <h2>The Blink Deficit Problem</h2>
+
+        <p>When you are not looking at a screen, you blink about 15 to 20 times per minute. During concentrated screen use, that rate drops to roughly 5 to 7 times per minute. Some studies have measured rates as low as 3 blinks per minute during intense tasks like gaming or coding.</p>
+
+        <p>Each blink spreads a fresh layer of tear film across the surface of the eye. Fewer blinks mean less coverage, which leads to dry spots on the cornea. Over hours, this produces the gritty, tired, stinging sensation that most screen workers recognize. The blink deficit number in your results estimates how many blinks you are losing each day compared to what your eyes would get if you were not on screens. It is a rough calculation, but it illustrates why <a href="/articles/dry-eye-screen-users/">dry eye</a> is so common among people who work digitally.</p>
+
+        <p>Conscious blinking, where you deliberately make a full blink every few minutes during screen work, is one of the simplest interventions available. It sounds too easy to matter, but when your involuntary blink rate has dropped by half, adding a few deliberate blinks makes a real difference in tear film stability.</p>
+
+        <h2>Related Reading</h2>
+        <div class="card-grid">
+            <a href="/articles/computer-vision-syndrome/" class="card" style="text-decoration:none;color:inherit">
+                <h3>Computer Vision Syndrome</h3>
+                <p>What it actually is, how to tell if you have it, and the adjustments that made the biggest difference for me.</p>
+            </a>
+            <a href="/articles/20-20-20-rule/" class="card" style="text-decoration:none;color:inherit">
+                <h3>The 20-20-20 Rule</h3>
+                <p>Every 20 minutes, look at something 20 feet away for 20 seconds. Simple idea, but making it stick is the hard part.</p>
+            </a>
+            <a href="/articles/dry-eye-screen-users/" class="card" style="text-decoration:none;color:inherit">
+                <h3>Dry Eye for Screen Users</h3>
+                <p>You blink less when you stare at screens. A lot less. Here is how I manage the dryness without eye drops every hour.</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>2026 NeoVista Inc.</p>
+</footer>
+
+<script>
+(function () {
+    "use strict";
+
+    var AVG_AMERICAN_HOURS = 7.3;
+    var BAR_MAX = 20;
+    var NORMAL_BLINKS_PER_MIN = 17;
+    var SCREEN_BLINKS_PER_MIN = 6;
+
+    var workSlider = document.getElementById("work-hours");
+    var phoneSlider = document.getElementById("phone-hours");
+    var tvSlider = document.getElementById("tv-hours");
+    var tabletSlider = document.getElementById("tablet-hours");
+
+    var workVal = document.getElementById("work-val");
+    var phoneVal = document.getElementById("phone-val");
+    var tvVal = document.getElementById("tv-val");
+    var tabletVal = document.getElementById("tablet-val");
+
+    var rDaily = document.getElementById("r-daily");
+    var rWeekly = document.getElementById("r-weekly");
+    var rYearly = document.getElementById("r-yearly");
+    var rRisk = document.getElementById("r-risk");
+    var rBlink = document.getElementById("r-blink");
+    var rRecs = document.getElementById("r-recs");
+    var barFill = document.getElementById("bar-fill");
+    var barAvg = document.getElementById("bar-avg");
+    var compText = document.getElementById("comparison-text");
+
+    function getRadioValue(name) {
+        var radios = document.querySelectorAll('input[name="' + name + '"]');
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+                return radios[i].value;
+            }
+        }
+        return null;
+    }
+
+    function formatHours(h) {
+        if (h === 0) { return "0 hrs"; }
+        if (h === 1) { return "1 hr"; }
+        if (h % 1 === 0) { return h + " hrs"; }
+        return h.toFixed(1) + " hrs";
+    }
+
+    function formatNumber(n) {
+        return n.toLocaleString("en-US");
+    }
+
+    function calcBlinkDeficit(totalHours) {
+        var screenMinutes = totalHours * 60;
+        var lostBlinksPerMin = NORMAL_BLINKS_PER_MIN - SCREEN_BLINKS_PER_MIN;
+        var deficit = Math.round(lostBlinksPerMin * screenMinutes);
+        return deficit;
+    }
+
+    function calcRiskLevel(totalHours, breaks, age, glasses) {
+        var score = 0;
+
+        if (totalHours < 4) {
+            score = 1;
+        } else if (totalHours < 8) {
+            score = 2;
+        } else if (totalHours < 12) {
+            score = 3;
+        } else {
+            score = 4;
+        }
+
+        if (breaks === "0" && totalHours >= 4) {
+            score = score + 1;
+        } else if (breaks === "3" && score > 1) {
+            score = score - 1;
+        }
+
+        if (age === "40-59") {
+            score = score + 1;
+        } else if (age === "60+") {
+            score = score + 1;
+        } else if (age === "under20") {
+            score = score + 1;
+        }
+
+        if (glasses === "yes" && totalHours >= 6) {
+            score = score + 1;
+        }
+
+        if (score <= 1) { return "Low"; }
+        if (score <= 2) { return "Moderate"; }
+        if (score <= 3) { return "High"; }
+        return "Very High";
+    }
+
+    function getRiskClass(level) {
+        if (level === "Low") { return "risk-low"; }
+        if (level === "Moderate") { return "risk-moderate"; }
+        if (level === "High") { return "risk-high"; }
+        return "risk-very-high";
+    }
+
+    function getBarColor(totalHours) {
+        if (totalHours < 4) { return "#1e7e34"; }
+        if (totalHours < 8) { return "#b8860b"; }
+        if (totalHours < 12) { return "#c0392b"; }
+        return "#8b0000";
+    }
+
+    function buildRecommendations(totalHours, breaks, age, glasses, workHours) {
+        var recs = [];
+
+        if (totalHours >= 2) {
+            recs.push(
+                "Follow the 20-20-20 rule: every 20 minutes of screen use, look at something 20 feet away for 20 seconds. This gives your focusing muscles a brief reset and helps maintain your natural blink rate."
+            );
+        }
+
+        if (breaks === "0") {
+            recs.push(
+                "You reported taking no breaks during screen use. Even short pauses of 30 seconds make a measurable difference in eye fatigue. Set a timer on your phone or use a desktop reminder app until the habit sticks."
+            );
+        } else if (breaks === "1" && totalHours >= 6) {
+            recs.push(
+                "One break per hour is a good start, but at your usage level, aim for at least two. A 20-second gaze shift every 20 to 30 minutes is more effective than a single longer break per hour."
+            );
+        }
+
+        if (totalHours >= 8) {
+            recs.push(
+                "Consider preservative-free artificial tears once or twice during the day, especially in the afternoon when tear film stability tends to drop. Look for products labeled for dry eye relief rather than redness relief."
+            );
+        }
+
+        if (totalHours >= 6) {
+            recs.push(
+                "Practice conscious blinking during focused screen tasks. Make a full, deliberate blink every 10 to 15 seconds for a minute or two when you notice dryness or strain setting in."
+            );
+        }
+
+        if (glasses === "yes") {
+            recs.push(
+                "Since you already wear corrective lenses, ask your eye care provider about computer-specific glasses at your next visit. These have a slight focal adjustment optimized for the 20 to 26 inch working distance that standard prescriptions don't account for."
+            );
+        }
+
+        if (glasses === "no" && totalHours >= 6) {
+            recs.push(
+                "If you have not had a full eye exam in the past two years, schedule one. A mild uncorrected refractive error that you would never notice in daily life can cause significant cumulative strain during long screen sessions."
+            );
+        }
+
+        if (workHours >= 6) {
+            recs.push(
+                "Position your monitor so the top of the screen is at or just below eye level, about 20 to 26 inches from your face. Looking slightly downward reduces the exposed surface area of your eyes and slows tear evaporation."
+            );
+        }
+
+        if (age === "40-59" || age === "60+") {
+            recs.push(
+                "After 40, the lens loses flexibility and close focusing requires more effort, a condition called presbyopia. If you notice increasing difficulty shifting focus between your screen and distant objects, progressive or occupational lenses designed for screen distances can reduce strain significantly."
+            );
+        }
+
+        if (age === "under20") {
+            recs.push(
+                "For younger eyes that are still developing, extended screen time carries additional considerations including potential effects on myopia progression. Spending at least 90 minutes per day outdoors in natural light has been associated with reduced myopia risk in multiple large studies."
+            );
+        }
+
+        if (totalHours >= 10) {
+            recs.push(
+                "Your total screen time is in the top percentile. Look for at least one device category where you can cut 30 to 60 minutes daily. Replacing evening phone scrolling with a non-screen activity often yields the biggest comfort gains since your eyes are already fatigued by that point."
+            );
+        }
+
+        if (totalHours >= 4 && totalHours < 8 && breaks !== "0") {
+            recs.push(
+                "Your usage is moderate and you are already taking breaks, which puts you in a manageable range. Focus on ergonomics: proper lighting, minimal glare, and matching your screen brightness to your environment. These adjustments compound over time."
+            );
+        }
+
+        if (totalHours < 2) {
+            recs.push(
+                "Your screen time is well below the threshold where digital eye strain typically becomes an issue. Maintain good lighting when you do use screens and keep up with routine eye exams every one to two years."
+            );
+        }
+
+        return recs;
+    }
+
+    function update() {
+        var work = parseFloat(workSlider.value);
+        var phone = parseFloat(phoneSlider.value);
+        var tv = parseFloat(tvSlider.value);
+        var tablet = parseFloat(tabletSlider.value);
+
+        workVal.textContent = formatHours(work);
+        phoneVal.textContent = formatHours(phone);
+        tvVal.textContent = formatHours(tv);
+        tabletVal.textContent = formatHours(tablet);
+
+        var total = work + phone + tv + tablet;
+        var weekly = total * 7;
+        var yearly = Math.round(total * 365);
+
+        rDaily.textContent = total.toFixed(1) + " hours";
+        rWeekly.textContent = weekly.toFixed(1) + " hours";
+        rYearly.textContent = formatNumber(yearly) + " hours";
+
+        var breaks = getRadioValue("breaks");
+        var age = getRadioValue("age");
+        var glasses = getRadioValue("glasses");
+
+        var riskLevel = calcRiskLevel(total, breaks, age, glasses);
+        var riskClass = getRiskClass(riskLevel);
+        rRisk.innerHTML = '<span class="risk-badge ' + riskClass + '">' + riskLevel + '</span>';
+
+        var deficit = calcBlinkDeficit(total);
+        rBlink.textContent = formatNumber(deficit) + " blinks/day";
+
+        var barPct = Math.min((total / BAR_MAX) * 100, 100);
+        var avgPct = (AVG_AMERICAN_HOURS / BAR_MAX) * 100;
+        barFill.style.width = barPct + "%";
+        barFill.style.background = getBarColor(total);
+        barAvg.style.left = avgPct + "%";
+
+        var diff = total - AVG_AMERICAN_HOURS;
+        var compStr = "The average American spends about 7 hours and 18 minutes on screens per day. ";
+        if (Math.abs(diff) < 0.2) {
+            compStr += "You are right at the national average.";
+        } else if (diff > 0) {
+            compStr += "You are at " + total.toFixed(1) + " hours, which is " + diff.toFixed(1) + " hours above average.";
+        } else {
+            compStr += "You are at " + total.toFixed(1) + " hours, which is " + Math.abs(diff).toFixed(1) + " hours below average.";
+        }
+        compStr += " The dark marker on the bar shows where the average falls.";
+        compText.textContent = compStr;
+
+        var recs = buildRecommendations(total, breaks, age, glasses, work);
+        var recsHtml = "";
+        for (var i = 0; i < recs.length; i++) {
+            recsHtml += "<li>" + recs[i] + "</li>";
+        }
+        rRecs.innerHTML = recsHtml;
+    }
+
+    workSlider.addEventListener("input", update);
+    phoneSlider.addEventListener("input", update);
+    tvSlider.addEventListener("input", update);
+    tabletSlider.addEventListener("input", update);
+
+    var allRadios = document.querySelectorAll('input[type="radio"]');
+    for (var j = 0; j < allRadios.length; j++) {
+        allRadios[j].addEventListener("change", update);
+    }
+
+    update();
+})();
+</script>
+
+</body>
+</html>
