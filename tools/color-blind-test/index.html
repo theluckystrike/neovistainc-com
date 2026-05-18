@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Blind Test - Free Online Ishihara-Style Screening | NeoVista</title>
+    <meta name="description" content="Take a free color blind test with SVG-based Ishihara-style plates. Screen for protan, deutan, and tritan color vision deficiencies in about two minutes.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://neovistainc.com/tools/color-blind-test/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Color Blind Test - Free Online Ishihara-Style Screening">
+    <meta property="og:description" content="Take a free color blind test with SVG-based Ishihara-style plates. Screen for protan, deutan, and tritan color vision deficiencies in about two minutes.">
+    <meta property="og:url" content="https://neovistainc.com/tools/color-blind-test/">
+    <meta property="og:site_name" content="NeoVista Inc">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Color Blind Test - Free Online Ishihara-Style Screening">
+    <meta name="twitter:description" content="Take a free color blind test with SVG-based Ishihara-style plates. Screen for protan, deutan, and tritan color vision deficiencies in about two minutes.">
+
+    <link rel="stylesheet" href="/style.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Color Blind Test",
+        "url": "https://neovistainc.com/tools/color-blind-test/",
+        "description": "Free online color blind screening test using Ishihara-style SVG plates. Tests for protan, deutan, and tritan color vision deficiencies.",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "NeoVista Inc",
+            "url": "https://neovistainc.com/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://neovistainc.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Tools", "item": "https://neovistainc.com/#tools"},
+            {"@type": "ListItem", "position": 3, "name": "Color Blind Test", "item": "https://neovistainc.com/tools/color-blind-test/"}
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How accurate is an online color blind test?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Online screening tests can indicate possible color vision deficiencies but cannot replace a clinical diagnosis. Monitor calibration, ambient lighting, and screen quality all affect results. If this test flags a potential deficiency, schedule an appointment with an eye care professional for a proper evaluation using standardized Ishihara plates."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the difference between protan and deutan color blindness?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Protan deficiency affects red-sensitive cone cells, making reds appear darker and harder to distinguish from greens and browns. Deutan deficiency affects green-sensitive cone cells and is the most common type, causing difficulty distinguishing green from red and certain shades of brown. Both fall under the category of red-green color blindness."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can color blindness be cured?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Most color vision deficiencies are genetic and cannot be cured. However, specially tinted glasses and contact lenses can enhance color distinction for some people. Acquired color blindness from medications, disease, or aging may improve if the underlying cause is treated."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <style>
+        .test-area {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .plate-wrapper {
+            text-align: center;
+            margin: 24px 0;
+        }
+        .plate-wrapper svg {
+            border-radius: 50%;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            max-width: 320px;
+            width: 100%;
+            height: auto;
+        }
+        .plate-counter {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .plate-question {
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 20px 0 16px;
+            color: var(--blue-dark);
+            font-weight: 600;
+        }
+        .answer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto 24px;
+        }
+        .answer-btn {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            color: var(--text);
+            text-align: center;
+        }
+        .answer-btn:hover {
+            border-color: var(--teal);
+            background: var(--blue-light);
+        }
+        .answer-btn.selected {
+            border-color: var(--teal);
+            background: var(--blue-light);
+            font-weight: 600;
+        }
+        .answer-btn.correct {
+            border-color: #2e8b57;
+            background: #e8f5ee;
+        }
+        .answer-btn.incorrect {
+            border-color: #c0392b;
+            background: #fce8e6;
+        }
+        .start-btn, .next-btn, .restart-btn {
+            display: block;
+            margin: 24px auto;
+            background: var(--teal);
+            color: #fff;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .start-btn:hover, .next-btn:hover, .restart-btn:hover {
+            background: var(--blue);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--teal);
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+        .results-container {
+            text-align: center;
+            padding: 32px 0;
+        }
+        .results-category {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+            margin: 16px 0 8px;
+        }
+        .results-detail {
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+        .results-breakdown {
+            text-align: left;
+            margin: 24px auto;
+            max-width: 440px;
+        }
+        .results-breakdown h3 {
+            margin: 20px 0 8px;
+            font-size: 1.05rem;
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+        .result-row .label {
+            color: var(--text);
+        }
+        .result-row .value {
+            font-weight: 600;
+        }
+        .result-pass { color: #2e8b57; }
+        .result-fail { color: #c0392b; }
+        .disclaimer-box {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 24px 0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        .disclaimer-box strong {
+            color: var(--text);
+        }
+        .intro-section {
+            margin-bottom: 32px;
+        }
+        .plate-type-label {
+            display: inline-block;
+            background: var(--blue-light);
+            color: var(--blue);
+            font-size: 0.75rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+        #test-section {
+            display: none;
+        }
+        #results-section {
+            display: none;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 480px) {
+            .plate-wrapper svg {
+                max-width: 260px;
+            }
+            .answer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .answer-btn {
+                padding: 12px 10px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/">NeoVista</a>
+    <div class="nav-links">
+        <a href="/#articles">Articles</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#about">About</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <div class="breadcrumb">
+        <a href="/">Home</a> / <a href="/#tools">Tools</a> / Color Blind Test
+    </div>
+
+    <h1>Color Blind Test</h1>
+
+    <div id="intro-section" class="intro-section">
+        <p>Color vision deficiency, commonly called color blindness, affects roughly 8% of men and 0.5% of women worldwide. Most people who have it are born with it and never realize anything looks different to them. The condition happens when one or more types of cone cells in the retina respond to light wavelengths differently than expected, making certain color pairs difficult to tell apart. Red-green deficiency is by far the most common type, but blue-yellow deficiency also exists and is often overlooked.</p>
+
+        <p>I built this screening tool after learning that many people discover their color vision deficiency only when it causes a real problem at work or while driving. The test uses Ishihara-style dot plates rendered entirely in SVG. Each plate contains a number hidden within a pattern of colored circles. If your color vision is typical, you will see the number clearly. If you have a deficiency in a particular color range, the number will be difficult or impossible to distinguish from the background dots.</p>
+
+        <p>This test screens for three types of deficiency: protan (red-weak), deutan (green-weak), and tritan (blue-yellow). It takes about two minutes to complete all ten plates. Keep your screen at normal brightness in a well-lit room for the most reliable results.</p>
+
+        <div class="disclaimer-box">
+            <strong>Screening tool only.</strong> This test is not a clinical diagnosis. Monitor calibration, screen quality, and ambient lighting can all affect your results. If you receive anything other than a normal result, I recommend scheduling an appointment with an eye care professional for a proper evaluation using standardized testing equipment.
+        </div>
+
+        <button class="start-btn" id="start-btn" onclick="startTest()">Start the Test</button>
+    </div>
+
+    <div id="test-section" class="test-area">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="plate-counter" id="plate-counter"></div>
+        <div id="plate-type"></div>
+        <div class="plate-wrapper" id="plate-wrapper"></div>
+        <p class="plate-question">What number do you see?</p>
+        <div class="answer-grid" id="answer-grid"></div>
+        <button class="next-btn hidden" id="next-btn" onclick="nextPlate()">Next Plate</button>
+    </div>
+
+    <div id="results-section" class="results-container">
+        <h2>Your Results</h2>
+        <div id="results-content"></div>
+        <div class="disclaimer-box" style="text-align:left; max-width:440px; margin:24px auto;">
+            <strong>Remember.</strong> This is a screening tool, not a medical diagnosis. If any category shows a possible deficiency, visit an optometrist or ophthalmologist for a full color vision evaluation. They use controlled lighting and calibrated physical plates that provide far more reliable results than any screen-based test.
+        </div>
+        <button class="restart-btn" onclick="restartTest()">Take the Test Again</button>
+    </div>
+
+    <section style="margin-top:48px;">
+        <h2>How Ishihara Plates Work</h2>
+        <p>Dr. Shinobu Ishihara developed his color perception test in 1917 while working at the University of Tokyo. The original test uses 38 printed plates, each containing a circle of dots in varying sizes and colors. A number or path is embedded within the dot pattern using colors that people with normal color vision can easily distinguish from the surrounding dots. The specific color combinations are chosen so that a person with a particular type of color deficiency will see either no number, a different number, or only a faint trace.</p>
+
+        <p>The plates in this online version follow the same principle but are generated using SVG rather than printed ink. Each plate uses a circle packed with small dots in carefully chosen hue ranges. The background dots and the number dots are designed to differ primarily in hue while staying similar in lightness and saturation. This is the key mechanism: people with normal color vision distinguish hues easily, while people with a color deficiency rely more on lightness differences, which these plates intentionally minimize.</p>
+
+        <h2>Types of Color Vision Deficiency</h2>
+
+        <h3>Red-green deficiency (protan and deutan)</h3>
+        <p>This is the most common category, affecting about 6% of men. Protan deficiency involves the red-sensitive (L) cone cells, making reds appear darker and harder to separate from greens and browns. Deutan deficiency involves the green-sensitive (M) cone cells and causes a similar confusion between reds and greens but without the darkening effect. Both are X-linked recessive traits, which is why they appear far more frequently in men than in women.</p>
+
+        <h3>Blue-yellow deficiency (tritan)</h3>
+        <p>Tritan deficiency is much rarer, affecting fewer than 1 in 10,000 people. It involves the blue-sensitive (S) cone cells and makes it difficult to distinguish between blue and green, and between yellow and violet. Unlike red-green deficiency, tritan deficiency is not sex-linked and affects men and women at equal rates. It can also be acquired later in life through aging, certain medications, or eye disease.</p>
+
+        <h2>When Color Vision Matters</h2>
+        <p>Color vision plays a larger role in daily life than most people expect. Traffic lights, electrical wiring, cooking (judging whether meat is done), map reading, choosing clothing, and many workplace tasks all rely on accurate color perception. Some professions require formal color vision testing, including aviation, maritime navigation, electrical work, and certain medical roles. Knowing about a deficiency early lets you develop workarounds and avoid situations where misidentifying a color could cause real problems.</p>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2026 NeoVista Inc. All rights reserved.</p>
+</footer>
+
+<script>
+(function() {
+    "use strict";
+
+    var PLATE_SIZE = 300;
+    var DOT_MIN_R = 3;
+    var DOT_MAX_R = 8;
+    var DOT_ATTEMPTS = 2200;
+    var DOT_PADDING = 1;
+
+    // Plate definitions: each plate has a number, type, background hue range, number hue range,
+    // and the answer choices. The "correct" answer is what someone with normal vision sees.
+    // The "confuse" answer is what someone with the deficiency might see (or nothing).
+    var PLATES = [
+        {
+            number: "12",
+            type: "control",
+            label: "Control Plate",
+            bgHue: [30, 50],
+            bgSat: [40, 60],
+            bgLit: [55, 70],
+            numHue: [15, 35],
+            numSat: [55, 75],
+            numLit: [40, 55],
+            correct: "12",
+            answers: ["12", "17", "Nothing", "21"],
+            correctIndex: 0
+        },
+        {
+            number: "8",
+            type: "protan",
+            label: "Red-Green (Protan)",
+            bgHue: [80, 140],
+            bgSat: [40, 65],
+            bgLit: [50, 65],
+            numHue: [0, 20],
+            numSat: [55, 75],
+            numLit: [48, 62],
+            correct: "8",
+            answers: ["3", "8", "Nothing", "6"],
+            correctIndex: 1
+        },
+        {
+            number: "6",
+            type: "deutan",
+            label: "Red-Green (Deutan)",
+            bgHue: [340, 380],
+            bgSat: [40, 60],
+            bgLit: [52, 66],
+            numHue: [100, 140],
+            numSat: [45, 65],
+            numLit: [50, 64],
+            correct: "6",
+            answers: ["6", "9", "Nothing", "5"],
+            correctIndex: 0
+        },
+        {
+            number: "29",
+            type: "protan",
+            label: "Red-Green (Protan)",
+            bgHue: [90, 145],
+            bgSat: [35, 55],
+            bgLit: [55, 68],
+            numHue: [350, 380],
+            numSat: [50, 70],
+            numLit: [52, 66],
+            correct: "29",
+            answers: ["70", "Nothing", "29", "26"],
+            correctIndex: 2
+        },
+        {
+            number: "5",
+            type: "deutan",
+            label: "Red-Green (Deutan)",
+            bgHue: [0, 25],
+            bgSat: [45, 65],
+            bgLit: [50, 64],
+            numHue: [110, 150],
+            numSat: [40, 60],
+            numLit: [48, 62],
+            correct: "5",
+            answers: ["Nothing", "2", "5", "3"],
+            correctIndex: 2
+        },
+        {
+            number: "3",
+            type: "protan",
+            label: "Red-Green (Protan)",
+            bgHue: [85, 135],
+            bgSat: [42, 62],
+            bgLit: [52, 65],
+            numHue: [5, 30],
+            numSat: [55, 72],
+            numLit: [50, 63],
+            correct: "3",
+            answers: ["8", "Nothing", "5", "3"],
+            correctIndex: 3
+        },
+        {
+            number: "15",
+            type: "deutan",
+            label: "Red-Green (Deutan)",
+            bgHue: [345, 375],
+            bgSat: [38, 58],
+            bgLit: [54, 67],
+            numHue: [95, 135],
+            numSat: [42, 62],
+            numLit: [52, 65],
+            correct: "15",
+            answers: ["15", "17", "Nothing", "1"],
+            correctIndex: 0
+        },
+        {
+            number: "74",
+            type: "protan",
+            label: "Red-Green (Protan)",
+            bgHue: [95, 150],
+            bgSat: [38, 58],
+            bgLit: [53, 66],
+            numHue: [355, 385],
+            numSat: [52, 70],
+            numLit: [51, 64],
+            correct: "74",
+            answers: ["21", "74", "Nothing", "71"],
+            correctIndex: 1
+        },
+        {
+            number: "7",
+            type: "tritan",
+            label: "Blue-Yellow (Tritan)",
+            bgHue: [45, 75],
+            bgSat: [50, 70],
+            bgLit: [52, 66],
+            numHue: [210, 250],
+            numSat: [45, 65],
+            numLit: [50, 64],
+            correct: "7",
+            answers: ["Nothing", "1", "7", "2"],
+            correctIndex: 2
+        },
+        {
+            number: "16",
+            type: "tritan",
+            label: "Blue-Yellow (Tritan)",
+            bgHue: [50, 80],
+            bgSat: [45, 65],
+            bgLit: [54, 67],
+            numHue: [220, 260],
+            numSat: [48, 68],
+            numLit: [48, 62],
+            correct: "16",
+            answers: ["16", "Nothing", "10", "18"],
+            correctIndex: 0
+        }
+    ];
+
+    // Digit path definitions as simple segment-based shapes within a normalized coordinate space
+    // Each digit is defined as a list of rectangular regions (x, y, w, h) normalized to 0-1
+    var DIGIT_PATHS = {
+        "1": [
+            {x: 0.35, y: 0.05, w: 0.30, h: 0.18},
+            {x: 0.38, y: 0.18, w: 0.24, h: 0.62},
+            {x: 0.20, y: 0.80, w: 0.60, h: 0.17}
+        ],
+        "2": [
+            {x: 0.15, y: 0.05, w: 0.70, h: 0.16},
+            {x: 0.55, y: 0.16, w: 0.30, h: 0.25},
+            {x: 0.15, y: 0.37, w: 0.70, h: 0.16},
+            {x: 0.15, y: 0.48, w: 0.30, h: 0.30},
+            {x: 0.15, y: 0.78, w: 0.70, h: 0.17}
+        ],
+        "3": [
+            {x: 0.15, y: 0.05, w: 0.70, h: 0.16},
+            {x: 0.55, y: 0.16, w: 0.30, h: 0.25},
+            {x: 0.20, y: 0.38, w: 0.65, h: 0.15},
+            {x: 0.55, y: 0.50, w: 0.30, h: 0.28},
+            {x: 0.15, y: 0.78, w: 0.70, h: 0.17}
+        ],
+        "4": [
+            {x: 0.15, y: 0.05, w: 0.25, h: 0.42},
+            {x: 0.55, y: 0.05, w: 0.25, h: 0.90},
+            {x: 0.15, y: 0.40, w: 0.65, h: 0.15}
+        ],
+        "5": [
+            {x: 0.15, y: 0.05, w: 0.70, h: 0.16},
+            {x: 0.15, y: 0.16, w: 0.28, h: 0.25},
+            {x: 0.15, y: 0.37, w: 0.70, h: 0.16},
+            {x: 0.55, y: 0.48, w: 0.30, h: 0.30},
+            {x: 0.15, y: 0.78, w: 0.70, h: 0.17}
+        ],
+        "6": [
+            {x: 0.15, y: 0.05, w: 0.70, h: 0.16},
+            {x: 0.15, y: 0.16, w: 0.28, h: 0.62},
+            {x: 0.15, y: 0.42, w: 0.70, h: 0.15},
+            {x: 0.57, y: 0.52, w: 0.28, h: 0.26},
+            {x: 0.15, y: 0.78, w: 0.70, h: 0.17}
+        ],
+        "7": [
+            {x: 0.15, y: 0.05, w: 0.70, h: 0.18},
+            {x: 0.55, y: 0.18, w: 0.28, h: 0.77}
+        ],
+        "8": [
+            {x: 0.15, y: 0.05, w: 0.70, h: 0.16},
+            {x: 0.15, y: 0.16, w: 0.28, h: 0.25},
+            {x: 0.57, y: 0.16, w: 0.28, h: 0.25},
+            {x: 0.15, y: 0.38, w: 0.70, h: 0.15},
+            {x: 0.15, y: 0.50, w: 0.28, h: 0.28},
+            {x: 0.57, y: 0.50, w: 0.28, h: 0.28},
+            {x: 0.15, y: 0.78, w: 0.70, h: 0.17}
+        ],
+        "9": [
+            {x: 0.15, y: 0.05, w: 0.70, h: 0.16},
+            {x: 0.15, y: 0.16, w: 0.28, h: 0.26},
+            {x: 0.57, y: 0.16, w: 0.28, h: 0.62},
+            {x: 0.15, y: 0.38, w: 0.70, h: 0.15},
+            {x: 0.15, y: 0.78, w: 0.70, h: 0.17}
+        ],
+        "0": [
+            {x: 0.15, y: 0.05, w: 0.70, h: 0.16},
+            {x: 0.15, y: 0.16, w: 0.28, h: 0.62},
+            {x: 0.57, y: 0.16, w: 0.28, h: 0.62},
+            {x: 0.15, y: 0.78, w: 0.70, h: 0.17}
+        ]
+    };
+
+    var currentPlateIndex = 0;
+    var answers = [];
+    var seededRng = createRng(42);
+
+    function createRng(seed) {
+        var s = seed;
+        return function() {
+            s = (s * 1664525 + 1013904223) & 0xFFFFFFFF;
+            return (s >>> 0) / 0xFFFFFFFF;
+        };
+    }
+
+    function randRange(rng, min, max) {
+        return min + rng() * (max - min);
+    }
+
+    function isInsideCircle(x, y, cx, cy, r) {
+        var dx = x - cx;
+        var dy = y - cy;
+        return (dx * dx + dy * dy) <= (r * r);
+    }
+
+    function isPointInNumber(px, py, numberStr, plateSize) {
+        var digits = numberStr.split("");
+        var totalWidth = digits.length * 0.38;
+        var startX = (1 - totalWidth) / 2;
+
+        for (var d = 0; d < digits.length; d++) {
+            var digit = digits[d];
+            var segments = DIGIT_PATHS[digit];
+            if (!segments) { continue; }
+            var offsetX = startX + d * 0.38;
+
+            for (var s = 0; s < segments.length; s++) {
+                var seg = segments[s];
+                var sx = (offsetX + seg.x * 0.35) * plateSize;
+                var sy = (0.18 + seg.y * 0.65) * plateSize;
+                var sw = seg.w * 0.35 * plateSize;
+                var sh = seg.h * 0.65 * plateSize;
+
+                if (px >= sx && px <= sx + sw && py >= sy && py <= sy + sh) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function generateHSL(rng, hueRange, satRange, litRange) {
+        var h = randRange(rng, hueRange[0], hueRange[1]) % 360;
+        if (h < 0) { h += 360; }
+        var s = randRange(rng, satRange[0], satRange[1]);
+        var l = randRange(rng, litRange[0], litRange[1]);
+        return "hsl(" + Math.round(h) + "," + Math.round(s) + "%," + Math.round(l) + "%)";
+    }
+
+    function generatePlate(plateConfig) {
+        var rng = createRng(plateConfig.number.charCodeAt(0) * 1000 + PLATES.indexOf(plateConfig) * 137);
+        var size = PLATE_SIZE;
+        var center = size / 2;
+        var radius = size / 2 - 2;
+        var dots = [];
+
+        for (var attempt = 0; attempt < DOT_ATTEMPTS; attempt++) {
+            var r = randRange(rng, DOT_MIN_R, DOT_MAX_R);
+            var angle = rng() * Math.PI * 2;
+            var dist = rng() * (radius - r - 2);
+            var x = center + Math.cos(angle) * dist;
+            var y = center + Math.sin(angle) * dist;
+
+            if (!isInsideCircle(x, y, center, center, radius - r)) {
+                continue;
+            }
+
+            var overlaps = false;
+            for (var i = 0; i < dots.length; i++) {
+                var dx = dots[i].x - x;
+                var dy = dots[i].y - y;
+                var minDist = dots[i].r + r + DOT_PADDING;
+                if (dx * dx + dy * dy < minDist * minDist) {
+                    overlaps = true;
+                    break;
+                }
+            }
+
+            if (overlaps) { continue; }
+
+            var inNumber = isPointInNumber(x, y, plateConfig.number, size);
+            var color;
+            if (inNumber) {
+                color = generateHSL(rng, plateConfig.numHue, plateConfig.numSat, plateConfig.numLit);
+            } else {
+                color = generateHSL(rng, plateConfig.bgHue, plateConfig.bgSat, plateConfig.bgLit);
+            }
+
+            dots.push({x: x, y: y, r: r, color: color});
+        }
+
+        return dots;
+    }
+
+    function renderPlate(plateConfig) {
+        var dots = generatePlate(plateConfig);
+        var size = PLATE_SIZE;
+
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + size + ' ' + size + '" width="' + size + '" height="' + size + '">';
+        svg += '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + (size/2) + '" fill="#f0f0e8"/>';
+
+        for (var i = 0; i < dots.length; i++) {
+            var dot = dots[i];
+            svg += '<circle cx="' + dot.x.toFixed(1) + '" cy="' + dot.y.toFixed(1) + '" r="' + dot.r.toFixed(1) + '" fill="' + dot.color + '"/>';
+        }
+
+        svg += '</svg>';
+        return svg;
+    }
+
+    function showPlate(index) {
+        if (index < 0 || index >= PLATES.length) { return; }
+
+        var plate = PLATES[index];
+        var wrapper = document.getElementById("plate-wrapper");
+        var answerGrid = document.getElementById("answer-grid");
+        var counter = document.getElementById("plate-counter");
+        var plateType = document.getElementById("plate-type");
+        var nextBtn = document.getElementById("next-btn");
+        var progressFill = document.getElementById("progress-fill");
+
+        wrapper.innerHTML = renderPlate(plate);
+        counter.textContent = "Plate " + (index + 1) + " of " + PLATES.length;
+        plateType.innerHTML = '<span class="plate-type-label">' + plate.label + '</span>';
+        progressFill.style.width = ((index / PLATES.length) * 100) + "%";
+
+        answerGrid.innerHTML = "";
+        for (var i = 0; i < plate.answers.length; i++) {
+            var btn = document.createElement("button");
+            btn.className = "answer-btn";
+            btn.textContent = plate.answers[i];
+            btn.setAttribute("data-index", i);
+            btn.onclick = (function(answerIndex) {
+                return function() { selectAnswer(answerIndex); };
+            })(i);
+            answerGrid.appendChild(btn);
+        }
+
+        nextBtn.classList.add("hidden");
+    }
+
+    function selectAnswer(answerIndex) {
+        var plate = PLATES[currentPlateIndex];
+        var buttons = document.querySelectorAll(".answer-btn");
+        var nextBtn = document.getElementById("next-btn");
+
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].onclick = null;
+            buttons[i].style.cursor = "default";
+            if (parseInt(buttons[i].getAttribute("data-index")) === plate.correctIndex) {
+                buttons[i].classList.add("correct");
+            }
+        }
+
+        if (answerIndex !== plate.correctIndex) {
+            buttons[answerIndex].classList.add("incorrect");
+        }
+
+        buttons[answerIndex].classList.add("selected");
+
+        answers.push({
+            plate: currentPlateIndex,
+            type: plate.type,
+            correct: answerIndex === plate.correctIndex,
+            selected: plate.answers[answerIndex],
+            expected: plate.correct
+        });
+
+        if (currentPlateIndex < PLATES.length - 1) {
+            nextBtn.textContent = "Next Plate";
+        } else {
+            nextBtn.textContent = "See Results";
+        }
+        nextBtn.classList.remove("hidden");
+    }
+
+    function calculateResults() {
+        var controlCorrect = 0;
+        var controlTotal = 0;
+        var protanCorrect = 0;
+        var protanTotal = 0;
+        var deutanCorrect = 0;
+        var deutanTotal = 0;
+        var tritanCorrect = 0;
+        var tritanTotal = 0;
+
+        for (var i = 0; i < answers.length; i++) {
+            var a = answers[i];
+            if (a.type === "control") {
+                controlTotal++;
+                if (a.correct) { controlCorrect++; }
+            } else if (a.type === "protan") {
+                protanTotal++;
+                if (a.correct) { protanCorrect++; }
+            } else if (a.type === "deutan") {
+                deutanTotal++;
+                if (a.correct) { deutanCorrect++; }
+            } else if (a.type === "tritan") {
+                tritanTotal++;
+                if (a.correct) { tritanCorrect++; }
+            }
+        }
+
+        return {
+            control: {correct: controlCorrect, total: controlTotal},
+            protan: {correct: protanCorrect, total: protanTotal},
+            deutan: {correct: deutanCorrect, total: deutanTotal},
+            tritan: {correct: tritanCorrect, total: tritanTotal}
+        };
+    }
+
+    function determineCategory(results) {
+        var controlFailed = results.control.correct < results.control.total;
+        var protanFailed = results.protan.correct < (results.protan.total - 1);
+        var deutanFailed = results.deutan.correct < (results.deutan.total - 1);
+        var tritanFailed = results.tritan.correct < results.tritan.total;
+
+        if (controlFailed) {
+            return {
+                label: "Inconclusive - Please See a Specialist",
+                detail: "You missed the control plate, which everyone with any type of color vision should be able to read. This could indicate a screen calibration issue, unusual lighting conditions, or a vision concern worth discussing with an eye care professional.",
+                className: "result-fail"
+            };
+        }
+
+        var issues = [];
+        if (protanFailed) { issues.push("protan (red-weak)"); }
+        if (deutanFailed) { issues.push("deutan (green-weak)"); }
+        if (tritanFailed) { issues.push("tritan (blue-yellow)"); }
+
+        if (issues.length === 0) {
+            return {
+                label: "Normal Color Vision",
+                detail: "You correctly identified the numbers on all plates. Your color vision appears to be functioning normally across the red-green and blue-yellow ranges tested here.",
+                className: "result-pass"
+            };
+        }
+
+        if (protanFailed && deutanFailed && tritanFailed) {
+            return {
+                label: "Possible Broad Color Deficiency",
+                detail: "You had difficulty with plates across multiple categories. This suggests a possible broad color vision deficiency. A full clinical evaluation would help determine the specific type and severity.",
+                className: "result-fail"
+            };
+        }
+
+        if (protanFailed && deutanFailed) {
+            return {
+                label: "Possible Red-Green Deficiency",
+                detail: "You missed plates in both the protan and deutan categories. This pattern is consistent with red-green color vision deficiency, the most common type. An eye care professional can determine whether it is primarily protan or deutan.",
+                className: "result-fail"
+            };
+        }
+
+        if (protanFailed) {
+            return {
+                label: "Possible Red-Weak (Protan) Deficiency",
+                detail: "You had difficulty with the protan screening plates, which test the red-sensitive part of your color vision. This could indicate protanomaly (reduced red sensitivity) or protanopia (absent red sensitivity).",
+                className: "result-fail"
+            };
+        }
+
+        if (deutanFailed) {
+            return {
+                label: "Possible Green-Weak (Deutan) Deficiency",
+                detail: "You had difficulty with the deutan screening plates, which test the green-sensitive part of your color vision. This is the most common type of color deficiency. An eye care professional can confirm and measure the degree.",
+                className: "result-fail"
+            };
+        }
+
+        if (tritanFailed) {
+            return {
+                label: "Possible Blue-Yellow (Tritan) Deficiency",
+                detail: "You had difficulty with the tritan screening plates. Blue-yellow deficiency is uncommon and can sometimes be acquired rather than inherited. It is worth mentioning to your eye doctor at your next visit.",
+                className: "result-fail"
+            };
+        }
+
+        return {
+            label: "Inconclusive - Please See a Specialist",
+            detail: "Your results do not fit neatly into a single category. An eye care professional can run a more thorough evaluation.",
+            className: "result-fail"
+        };
+    }
+
+    function showResults() {
+        var results = calculateResults();
+        var category = determineCategory(results);
+        var content = document.getElementById("results-content");
+        var progressFill = document.getElementById("progress-fill");
+
+        progressFill.style.width = "100%";
+
+        var totalCorrect = 0;
+        for (var i = 0; i < answers.length; i++) {
+            if (answers[i].correct) { totalCorrect++; }
+        }
+
+        var html = '';
+        html += '<p class="results-category ' + category.className + '">' + category.label + '</p>';
+        html += '<p class="results-detail">' + category.detail + '</p>';
+        html += '<p style="font-size:1.1rem;margin-bottom:4px;">Overall score: <strong>' + totalCorrect + '/' + answers.length + '</strong> plates correct</p>';
+
+        html += '<div class="results-breakdown">';
+        html += '<h3>Score by Category</h3>';
+
+        html += '<div class="result-row">';
+        html += '<span class="label">Control plate</span>';
+        html += '<span class="value ' + (results.control.correct === results.control.total ? "result-pass" : "result-fail") + '">' + results.control.correct + '/' + results.control.total + '</span>';
+        html += '</div>';
+
+        html += '<div class="result-row">';
+        html += '<span class="label">Protan (red-weak) plates</span>';
+        html += '<span class="value ' + (results.protan.correct >= results.protan.total - 1 ? "result-pass" : "result-fail") + '">' + results.protan.correct + '/' + results.protan.total + '</span>';
+        html += '</div>';
+
+        html += '<div class="result-row">';
+        html += '<span class="label">Deutan (green-weak) plates</span>';
+        html += '<span class="value ' + (results.deutan.correct >= results.deutan.total - 1 ? "result-pass" : "result-fail") + '">' + results.deutan.correct + '/' + results.deutan.total + '</span>';
+        html += '</div>';
+
+        html += '<div class="result-row">';
+        html += '<span class="label">Tritan (blue-yellow) plates</span>';
+        html += '<span class="value ' + (results.tritan.correct === results.tritan.total ? "result-pass" : "result-fail") + '">' + results.tritan.correct + '/' + results.tritan.total + '</span>';
+        html += '</div>';
+
+        html += '<h3>Plate-by-Plate Answers</h3>';
+        for (var j = 0; j < answers.length; j++) {
+            var a = answers[j];
+            html += '<div class="result-row">';
+            html += '<span class="label">Plate ' + (j + 1) + ' (expected: ' + a.expected + ')</span>';
+            if (a.correct) {
+                html += '<span class="value result-pass">Correct (' + a.selected + ')</span>';
+            } else {
+                html += '<span class="value result-fail">Answered: ' + a.selected + '</span>';
+            }
+            html += '</div>';
+        }
+
+        html += '</div>';
+        content.innerHTML = html;
+
+        document.getElementById("test-section").style.display = "none";
+        document.getElementById("results-section").style.display = "block";
+        document.getElementById("results-section").scrollIntoView({behavior: "smooth"});
+    }
+
+    // Expose functions to global scope for onclick handlers
+    window.startTest = function() {
+        currentPlateIndex = 0;
+        answers = [];
+        document.getElementById("intro-section").style.display = "none";
+        document.getElementById("results-section").style.display = "none";
+        document.getElementById("test-section").style.display = "block";
+        showPlate(0);
+        document.getElementById("test-section").scrollIntoView({behavior: "smooth"});
+    };
+
+    window.nextPlate = function() {
+        currentPlateIndex++;
+        if (currentPlateIndex >= PLATES.length) {
+            showResults();
+        } else {
+            showPlate(currentPlateIndex);
+            document.getElementById("plate-wrapper").scrollIntoView({behavior: "smooth", block: "center"});
+        }
+    };
+
+    window.restartTest = function() {
+        currentPlateIndex = 0;
+        answers = [];
+        document.getElementById("results-section").style.display = "none";
+        document.getElementById("intro-section").style.display = "block";
+        window.scrollTo({top: 0, behavior: "smooth"});
+    };
+})();
+</script>
+
+</body>
+</html>
